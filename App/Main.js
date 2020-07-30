@@ -1,13 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter, Switch, Route}  from "react-router-dom"
 
-function ExampleComponent(){
+//My Components
+import Header from './components/Header'
+import HomeGuest from './components/HomeGuest'
+import Footer from './components/Footer';
+import About from './components/About';
+import Terms from './components/Terms';
+
+
+
+function Main(){
     return(
-        <div>
-            <h1>This is our app</h1>
-            <p>The sky is blue</p>
-            </div>
+        <BrowserRouter>
+       <Header/>
+       
+     <Switch>
+         <Route path="/" exact>
+             <HomeGuest />
+         </Route>
+         <Route path="/About-us" >
+             <About />
+         </Route>
+         <Route path="/Terms">
+             <Terms />
+         </Route>
+     </Switch>
+    <Footer/>
+
+    
+        </BrowserRouter>
     )
 
 }
-ReactDOM.render(<ExampleComponent/>, document.querySelector("#app"))
+ReactDOM.render(<Main/>, document.querySelector("#app"))
+
+if(module.hot){
+    module.hot.accept()
+}
