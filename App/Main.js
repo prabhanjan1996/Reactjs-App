@@ -1,7 +1,8 @@
-import React, { useEffect,useState, useReducer } from "react"
+import React, { useState, useReducer, useEffect } from "react"
 import ReactDOM from "react-dom"
-import {useImmerReducer} from 'use-immer'
+import { useImmerReducer } from "use-immer"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
+import { CSSTransition } from "react-transition-group"
 import Axios from "axios"
 Axios.defaults.baseURL = "http://localhost:8080"
 
@@ -21,17 +22,20 @@ import FlashMessages from "./components/FlashMessages"
 import Profile from "./components/Profile"
 import EditPost from "./components/EditPost"
 import NotFound from "./components/NotFound"
+import Search from "./components/Search"
+import Chat from "./components/Chat"
 
 function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("complexappToken")),
     flashMessages: [],
     user: {
-        token :localStorage.getItem("complexappToken"),
-        username : localStorage.getItem("complexappUsername"),
-        avatar: localStorage.getItem("complexappAvatar")
-
-    }
+      token: localStorage.getItem("complexappToken"),
+      username: localStorage.getItem("complexappUsername"),
+      avatar: localStorage.getItem("complexappAvatar"),
+    },
+    isSearchOpen: false,
+    isChatOpen: false,
   }
 
   function ourReducer(draft, action) {
@@ -44,27 +48,37 @@ function Main() {
         draft.loggedIn = false
         return
       case "flashMessage":
-       draft.flashMessages.push(action.value)
-       return
+        draft.flashMessages.push(action.value)
+        return
+      case "openSearch":
+        draft.isSearchOpen = true
+        return
+      case "closeSearch":
+        draft.isSearchOpen = false
+        return
+      case "toggleChat":
+        draft.isChatOpen = !draft.isChatOpen
+        return
+      case "closeChat":
+        draft.isChatOpen = false
+        return
     }
   }
 
   const [state, dispatch] = useImmerReducer(ourReducer, initialState)
 
   useEffect(() => {
-      if(state.loggedIn){
-        localStorage.setItem("complexappToken", state.user.token)
-        localStorage.setItem("complexappUsername", state.user.username)
-        localStorage.setItem("complexappAvatar", state.user.avatar)
-          
-      }else {
-        localStorage.removeItem("complexappToken")
-        localStorage.removeItem("complexappUsername")
-        localStorage.removeItem("complexappAvatar")
-
-      }
-
+    if (state.loggedIn) {
+      localStorage.setItem("complexappToken", state.user.token)
+      localStorage.setItem("complexappUsername", state.user.username)
+      localStorage.setItem("complexappAvatar", state.user.avatar)
+    } else {
+      localStorage.removeItem("complexappToken")
+      localStorage.removeItem("complexappUsername")
+      localStorage.removeItem("complexappAvatar")
+    }
   }, [state.loggedIn])
+
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
@@ -72,9 +86,9 @@ function Main() {
           <FlashMessages messages={state.flashMessages} />
           <Header />
           <Switch>
-              <Route path = "/profile/:username">
-                  <Profile />
-              </Route>
+            <Route path="/profile/:username">
+              <Profile />
+            </Route>
             <Route path="/" exact>
               {state.loggedIn ? <Home /> : <HomeGuest />}
             </Route>
@@ -83,7 +97,6 @@ function Main() {
             </Route>
             <Route path="/post/:id/edit" exact>
               <EditPost />
-
             </Route>
             <Route path="/create-post">
               <CreatePost />
@@ -98,6 +111,10 @@ function Main() {
               <NotFound />
             </Route>
           </Switch>
+          <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
+            <Search />
+          </CSSTransition>
+          <Chat />
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>

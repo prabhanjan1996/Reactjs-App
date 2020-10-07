@@ -1,16 +1,21 @@
-import React, {useState} from 'react'
+import React, {useState,  useContext} from 'react'
 import Page from './Page'
 import Axios from 'axios'
+import DispatchContext from "../DispatchContext"
+
 
 
 function HomeGuest(){
   const [username, setUsername]= useState()
   const [email,setEmail]= useState()
   const [password,setPassword]= useState()
+  const appDispatch = useContext(DispatchContext)
+  
   async function handleSubmit(e){
     e.preventDefault()
     try{
       await Axios.post('register',{username, email, password})
+      appDispatch({type: "flashMessage", value: "Congrats,You registered successfully."})
       console.log("user successfully registered")
     }
     catch(e){
@@ -45,7 +50,7 @@ return(
               <label htmlFor="password-register" className="text-muted mb-1">
                 <small>Password</small>
               </label>
-              <input onChange={e => setPassword(e.target.value)}id="password-register" name="password" className="form-control" type="password" placeholder="Create a password" />
+              <input onChange={e => setPassword(e.target.value)}id="password-register" name="password" className="form-control" type="password" placeholder="Create a password of 12 character" />
             </div>
             <button type="submit" className="py-3 mt-4 btn btn-lg btn-success btn-block">
               Sign up for ComplexApp
