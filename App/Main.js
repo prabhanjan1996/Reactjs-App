@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react"
+import React, { useState, useReducer, useEffect, Suspense } from "react"
 import ReactDOM from "react-dom"
 import { useImmerReducer } from "use-immer"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
@@ -10,20 +10,23 @@ import StateContext from "./StateContext"
 import DispatchContext from "./DispatchContext"
 
 // My Components
+import LoadingDotsIcon from "./components/LoadingDotsIcon"
 import Header from "./components/Header"
 import HomeGuest from "./components/HomeGuest"
 import Home from "./components/Home"
 import Footer from "./components/Footer"
 import About from "./components/About"
 import Terms from "./components/Terms"
-import CreatePost from "./components/CreatePost"
-import ViewSinglePost from "./components/ViewSinglePost"
+const CreatePost = React.lazy(()=> import ("./components/CreatePost"))
+const ViewSinglePost = React.lazy(()=> import ("./components/ViewSinglePost"))
+const Search = React.lazy(()=> import ("./components/Search"))
+const Chat = React.lazy(()=> import ("./components/Chat"))
 import FlashMessages from "./components/FlashMessages"
 import Profile from "./components/Profile"
 import EditPost from "./components/EditPost"
 import NotFound from "./components/NotFound"
-import Search from "./components/Search"
-import Chat from "./components/Chat"
+
+
 
 function Main() {
   const initialState = {
@@ -115,6 +118,7 @@ useEffect(() => {
         <BrowserRouter>
           <FlashMessages messages={state.flashMessages} />
           <Header />
+          <Suspense fallback={<LoadingDotsIcon />}>
           <Switch>
             <Route path="/profile/:username">
               <Profile />
@@ -141,10 +145,17 @@ useEffect(() => {
               <NotFound />
             </Route>
           </Switch>
+          </Suspense>
           <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
-            <Search />
+            <div className="search-overlay">
+<Suspense fallback="">
+  <Search />
+</Suspense>
+            </div>
           </CSSTransition>
-          <Chat />
+         <Suspense fallback="">
+           {state.loggedIn && <Chat />}
+         </Suspense>
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>
