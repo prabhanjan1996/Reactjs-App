@@ -1,34 +1,31 @@
-import React, {useEffect, useState, useContext} from "react"
-import Page from './Page'
-import Axios from 'axios'
-import {withRouter} from 'react-router-dom'
+import React, { useEffect, useState, useContext } from "react"
+import Page from "./Page"
+import Axios from "axios"
+import { withRouter } from "react-router-dom"
 import DispatchContext from "../DispatchContext"
 import StateContext from "../StateContext"
 
+function CreatePost(props) {
+  const [title, setTitle] = useState()
+  const [body, setBody] = useState()
+  const appDispatch = useContext(DispatchContext)
+  const appState = useContext(StateContext)
 
- function CreatePost(props){
-     const [title, setTitle] = useState()
-     const [body, setBody] = useState()
-     const appDispatch = useContext(DispatchContext)
-     const appState = useContext(StateContext)
-
-
-   async function handleSubmit(e){
-        e.preventDefault()
-        try{
-           const response = await Axios.post('/create-post', {title,body, token: appState.user.token} )
-          // Redirect to new post url
-          appDispatch({type: "flashMessage", value: "Congrats,You created new post."})
-          props.history.push(`/post/${response.data}`)
-           console.log("New post is created")
-        } catch(e){
-            console.log("There was a problem")
-        }
-
+  async function handleSubmit(e) {
+    e.preventDefault()
+    try {
+      const response = await Axios.post("/create-post", { title, body, token: appState.user.token })
+      // Redirect to new post url
+      appDispatch({ type: "flashMessage", value: "Congrats, you created a new post." })
+      props.history.push(`/post/${response.data}`)
+      console.log("New post was created.")
+    } catch (e) {
+      console.log("There was a problem.")
     }
-    return (
-<Page title="Create New Post ">
-<form onSubmit={handleSubmit}>
+  }
+  return (
+    <Page title="Create New Post">
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
@@ -45,7 +42,8 @@ import StateContext from "../StateContext"
 
         <button className="btn btn-primary">Save New Post</button>
       </form>
-</Page>
-    )
+    </Page>
+  )
 }
+
 export default withRouter(CreatePost)

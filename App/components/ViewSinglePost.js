@@ -57,14 +57,9 @@ function ViewSinglePost(props) {
 
   async function deleteHandler() {
     const areYouSure = window.confirm("Do you really want to delete this post?")
-
     if (areYouSure) {
       try {
-        const response = await Axios.delete(`/post/${id}`, { 
-            data:
-             { 
-                 token: appState.user.token
-                 } })
+        const response = await Axios({url: `/post/${id}`, data: {token: appState.user.token}, method: 'delete'})
         if (response.data == "Success") {
           // 1. display a flash message
           appDispatch({ type: "flashMessage", value: "Post was successfully deleted." })
@@ -103,9 +98,8 @@ function ViewSinglePost(props) {
         Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {dateFormatted}
       </p>
 
-      <div className="body-content">
-        <ReactMarkdown source={post.body} allowedTypes={["paragraph", "strong", "emphasis", "text", "heading", "list", "listItem"]} />
-      </div>
+    
+<div className="body-content">{post.body}</div>
     </Page>
   )
 }

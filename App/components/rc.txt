@@ -7,3 +7,11 @@ function EditPost(){
     )
 }
 export default EditPost
+
+
+
+const response = await Axios({url: `/post/${id}`, data: {token: appState.user.token}, method: 'delete'})
+
+
+
+<div className="body-content">{post.body}</div>

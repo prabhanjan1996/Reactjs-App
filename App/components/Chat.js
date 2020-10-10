@@ -2,9 +2,8 @@ import React, { useEffect, useContext, useRef } from "react"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import { useImmer } from "use-immer"
+import { Link } from "react-router-dom"
 import io from "socket.io-client"
-
-import {Link} from "react-router-dom"
 
 function Chat() {
   const socket = useRef(null)
@@ -20,20 +19,28 @@ function Chat() {
   useEffect(() => {
     if (appState.isChatOpen) {
       chatField.current.focus()
-      appDispatch({type: "clearUnreadChatCount"})
+      appDispatch({ type: "clearUnreadChatCount" })
     }
   }, [appState.isChatOpen])
 
   useEffect(() => {
-    socket.current=io("http://localhost:8080")
+    socket.current = io("http://localhost:8080")
+
     socket.current.on("chatFromServer", (message) => {
       setState((draft) => {
         draft.chatMessages.push(message)
       })
     })
 
-    return () =>socket.current.disconnect()
+    return () => socket.current.disconnect()
   }, [])
+
+  useEffect(() => {
+    chatLog.current.scrollTop = chatLog.current.scrollHeight
+    if (state.chatMessages.length && !appState.isChatOpen) {
+      appDispatch({ type: "incrementUnreadChatCount" })
+    }
+  }, [state.chatMessages])
 
   function handleFieldChange(e) {
     const value = e.target.value
@@ -41,15 +48,6 @@ function Chat() {
       draft.fieldValue = value
     })
   }
-
-  useEffect(() => {
-      chatLog.current.scrollTop = chatLog.current.scrollHeight
-      if(state.chatMessages.length && !appState.isChatOpen ){
-          appDispatch({type: "increamentUnreadChatCount"})
-
-      }
-
-  },[state.chatMessages])
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -75,7 +73,7 @@ function Chat() {
         {state.chatMessages.map((message, index) => {
           if (message.username == appState.user.username) {
             return (
-              <div  key={index} className="chat-self">
+              <div key={index} className="chat-self">
                 <div className="chat-message">
                   <div className="chat-message-inner">{message.message}</div>
                 </div>
@@ -91,8 +89,8 @@ function Chat() {
               </Link>
               <div className="chat-message">
                 <div className="chat-message-inner">
-                <Link to={`/profile/${message.username}`}>
-                    <strong>{message.username}:</strong>
+                  <Link to={`/profile/${message.username}`}>
+                    <strong>{message.username}: </strong>
                   </Link>
                   {message.message}
                 </div>

@@ -7,6 +7,7 @@ import ReactTooltip from "react-tooltip"
 function HeaderLoggedIn(props) {
   const appDispatch = useContext(DispatchContext)
   const appState = useContext(StateContext)
+
   function handleLogout() {
     appDispatch({ type: "logout" })
     appDispatch({ type: "flashMessage", value: "You have successfully logged out." })
@@ -16,6 +17,7 @@ function HeaderLoggedIn(props) {
     e.preventDefault()
     appDispatch({ type: "openSearch" })
   }
+
   return (
     <div className="flex-row my-3 my-md-0">
       <a data-for="search" data-tip="Search" onClick={handleSearchIcon} href="#" className="text-white mr-2 header-search-icon">
@@ -24,7 +26,7 @@ function HeaderLoggedIn(props) {
       <ReactTooltip place="bottom" id="search" className="custom-tooltip" />{" "}
       <span onClick={() => appDispatch({ type: "toggleChat" })} data-for="chat" data-tip="Chat" className={"mr-2 header-chat-icon " + (appState.unreadChatCount ? "text-danger" : "text-white")}>
         <i className="fas fa-comment"></i>
-        {appState.unreadChatCount ? <span className="chat-count-badge text-white"> {appState.unreadChatCount < 10 ? appState.unreadChatCount : "9+"} </span> : ""}
+        {appState.unreadChatCount ? <span className="chat-count-badge text-white">{appState.unreadChatCount < 10 ? appState.unreadChatCount : "9+"}</span> : ""}
       </span>
       <ReactTooltip place="bottom" id="chat" className="custom-tooltip" />{" "}
       <Link data-for="profile" data-tip="My Profile" to={`/profile/${appState.user.username}`} className="mr-2">

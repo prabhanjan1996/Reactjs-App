@@ -1,12 +1,11 @@
-import React from 'react'
-import Page from './Page'
+import React, { useEffect } from "react"
 
-function LongDotsIcon(){
-    return(
-        <div className="dots-loading">
-            <div></div>
-        </div>
-       
-    )
+function LoadingDotsIcon() {
+  return (
+    <div className="dots-loading">
+      <div></div>
+    </div>
+  )
 }
-export default LongDotsIcon
+
+export default LoadingDotsIcon
