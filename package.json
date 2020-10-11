@@ -15,31 +15,42 @@
   "author": "pavan",
   "license": "ISC",
   "dependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/node": "^7.10.4",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.9.4",
-    "axios": "^0.19.2",
-    "babel-loader": "^8.1.0",
+    "@babel/node": "^7.10.5",
+    "axios": "^0.20.0",
     "clean-webpack-plugin": "^3.0.0",
-    "dotenv-webpack": "^1.8.0",
-    "express": "^4.17.1",
+    "core-util-is": "^1.0.2",
+    "dotenv-webpack": "^3.0.0",
     "fs-extra": "^9.0.1",
     "generate": "^0.14.0",
     "html-webpack-harddisk-plugin": "^1.0.2",
-    "html-webpack-plugin": "^4.3.0",
-    "immer": "^6.0.9",
+    "html-webpack-plugin": "^4.5.0",
+    "immer": "^7.0.9",
     "npm-run-all": "^4.1.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.3.1",
     "react-router-dom": "^5.2.0",
-    "react-tooltip": "^4.2.7",
+    "react-tooltip": "^4.2.10",
     "react-transition-group": "^4.4.1",
-    "socket.io-client": "^2.3.0",
-    "use-immer": "^0.4.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
-  }
+    "socket.io-client": "^2.3.1",
+    "use-immer": "^0.4.1",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prabhanjan1996/Reactjs-App.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prabhanjan1996/Reactjs-App/issues"
+  },
+  "homepage": "https://github.com/prabhanjan1996/Reactjs-App#readme",
+  "description": ""
 }
